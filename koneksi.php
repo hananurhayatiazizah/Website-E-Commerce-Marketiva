@@ -1,19 +1,18 @@
 <?php
-// Memulai sesi untuk melacak status login pengguna atau admin
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
 
-$host = "localhost";
-$user = "root";
-$pass = "";
-$db   = "db_marketiva";
+// Otomatis membaca konfigurasi dari Railway atau fallback ke localhost jika dibuka di laptop
+$host = getenv('MYSQLHOST') ?: 'localhost';
+$user = getenv('MYSQLUSER') ?: 'root';
+$pass = getenv('MYSQLPASSWORD') ?: '';
+$db   = getenv('MYSQLDATABASE') ?: 'marketiva';
+$port = getenv('MYSQLPORT') ?: '3306';
 
-// Membuat koneksi ke database MySQL
-$conn = mysqli_connect($host, $user, $pass, $db);
+$conn = mysqli_connect($host, $user, $pass, $db, $port);
 
-// Cek apakah koneksi berhasil
 if (!$conn) {
-    die("Koneksi database gagal: " . mysqli_connect_error());
+    die("Koneksi gagal: " . mysqli_connect_error());
 }
 ?>
