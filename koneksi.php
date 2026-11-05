@@ -6,9 +6,10 @@ $pass     = getenv('MYSQLPASSWORD') ?: getenv('MYSQL_PASSWORD') ?: '';
 $db       = getenv('MYSQLDATABASE') ?: getenv('MYSQL_DATABASE') ?: 'railway';
 $port     = getenv('MYSQLPORT') ?: getenv('MYSQL_PORT') ?: 3306;
 
+// menggunakan $conn
 $conn = mysqli_connect($host, $user, $pass, $db, (int)$port);
 
-if (!$koneksi) {
+if (!$conn) {
     die("Koneksi database gagal: " . mysqli_connect_error());
 }
 ?>
