@@ -1,7 +1,8 @@
 FROM php:8.1-apache
 
-# Nonaktifkan modul MPM event/worker yang bentrok dan pastikan prefork aktif
-RUN a2dismod mpm_event mpm_worker || true && a2enmod mpm_prefork
+# Hapus semua modul MPM yang ada dan pastikan hanya prefork yang aktif
+RUN a2dismod -f mpm_event mpm_worker mpm_prefork || true
+RUN a2enmod mpm_prefork
 
 # Install ekstensi MySQL yang dibutuhkan PHP
 RUN docker-php-ext-install mysqli pdo pdo_mysql
