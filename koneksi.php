@@ -4,11 +4,11 @@ if (session_status() === PHP_SESSION_NONE) {
 }
 
 // Otomatis membaca konfigurasi dari Railway atau fallback ke localhost jika dibuka di laptop
-$host = getenv('MYSQLHOST') ?: 'localhost';
-$user = getenv('MYSQLUSER') ?: 'root';
-$pass = getenv('MYSQLPASSWORD') ?: '';
-$db   = getenv('MYSQLDATABASE') ?: 'marketiva';
-$port = getenv('MYSQLPORT') ?: '3306';
+$host = getenv('altaria.proxy.rlwy.net') ?: 'localhost';
+$user = getenv('root') ?: 'root';
+$pass = getenv('rRhPdgvKyaFgaZDbdyFpdXAqrfzMKIAF') ?: '';
+$db   = getenv('railway') ?: 'marketiva';
+$port = getenv('38054') ?: '3306';
 
 $conn = mysqli_connect($host, $user, $pass, $db, $port);
 
