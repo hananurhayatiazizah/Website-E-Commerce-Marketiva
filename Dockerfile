@@ -1,8 +1,9 @@
 FROM php:8.1-apache
 
-# Hapus semua modul MPM yang ada dan pastikan hanya prefork yang aktif
-RUN a2dismod -f mpm_event mpm_worker mpm_prefork || true
-RUN a2enmod mpm_prefork
+# Paksa nonaktifkan modul mpm_event dan pastikan mpm_prefork yang aktif
+RUN sed -i '/LoadModule mpm_event_module/s/^/#/' /etc/apache2/mods-available/mpm_event.load \
+    && sed -i '/LoadModule mpm_worker_module/s/^/#/' /etc/apache2/mods-available/mpm_worker.load \
+    && a2enmod mpm_prefork
 
 # Install ekstensi MySQL yang dibutuhkan PHP
 RUN docker-php-ext-install mysqli pdo pdo_mysql
