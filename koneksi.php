@@ -1,12 +1,22 @@
 <?php
-// Mengambil variabel database dari Railway, atau fallback ke localhost jika di XAMPP
-$host     = getenv('gondola.proxy.rlwy.net') ?: getenv('DB_HOST') ?: 'localhost';
-$user     = getenv('root') ?: getenv('DB_USER') ?: 'root';
-$pass     = getenv('GkPfROdZaWNwkjZaOMBRMPDIpqslrOaz') ?: getenv('DB_PASSWORD') ?: '';
-$db       = getenv('railway') ?: getenv('DB_NAME') ?: 'marketiva';
-$port     = getenv('10955') ?: getenv('DB_PORT') ?: '3306';
+// Cek apakah sedang running di Railway atau di Laptop (XAMPP)
+if (getenv('RAILWAY_ENVIRONMENT') || getenv('MYSQLHOST')) {
+    // Kalau di Railway, pakai data publik Railway
+    $host = 'gondola.proxy.rlwy.net';
+    $user = 'root';
+    $pass = 'GkPfROdZaWNwkJZa';
+    $db   = 'railway'; // atau 'marketiva'
+    $port = 10955;
+} else {
+    // Kalau lagi di laptop (XAMPP), pakai localhost seperti biasa
+    $host = 'localhost';
+    $user = 'root';
+    $pass = '';
+    $db   = 'marketiva';
+    $port = 3306;
+}
 
-$koneksi = mysqli_connect($host, $user, $pass, $db, (int)$port);
+$koneksi = mysqli_connect($host, $user, $pass, $db, $port);
 
 if (!$koneksi) {
     die("Koneksi database gagal: " . mysqli_connect_error());
