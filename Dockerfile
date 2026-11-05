@@ -1,18 +1,18 @@
 FROM php:8.1-cli
 
-# Install ekstensi MySQL
+# Install ekstensi MySQL yang dibutuhkan aplikasi
 RUN apt-get update && apt-get install -y \
     libpng-dev libjpeg-dev libfreetype6-dev \
     && docker-php-ext-install mysqli pdo pdo_mysql
 
-# Set working directory
+# Arahkan langsung ke folder kerja utama server web
 WORKDIR /var/www/html
 
-# Copy semua file project
+# Salin semua file dari repository ke dalam container
 COPY . .
 
-# Expose port (Railway akan override port ini secara internal)
-EXPOSE 80
+# Gunakan port dinamis yang disediakan oleh Railway
+EXPOSE 8080
 
-# Jalankan server internal PHP pada port 80
-CMD ["php", "-S", "0.0.0.0:80"]
+# Jalankan server PHP dengan port dinamis Railway ($PORT)
+CMD sh -c "php -S 0.0.0.0:${PORT:-8080}"
