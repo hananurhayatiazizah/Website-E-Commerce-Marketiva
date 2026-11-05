@@ -1,15 +1,21 @@
-FROM php:8.1-apache
+FROM php:8.1-fpm-alpine
 
-# Paksa nonaktifkan modul mpm_event dan pastikan mpm_prefork yang aktif
-RUN sed -i '/LoadModule mpm_event_module/s/^/#/' /etc/apache2/mods-available/mpm_event.load \
-    && sed -i '/LoadModule mpm_worker_module/s/^/#/' /etc/apache2/mods-available/mpm_worker.load \
-    && a2enmod mpm_prefork
+# Install Apache dan pustaka yang dibutuhkan
+RUN apk add --no-cache apache2 apache2-utils
 
-# Install ekstensi MySQL yang dibutuhkan PHP
+# Install ekstensi MySQL untuk PHP
 RUN docker-php-ext-install mysqli pdo pdo_mysql
 
-# Salin semua file project ke dalam server web apache
+# Salin file project
 COPY . /var/www/html/
 
-# Ubah hak akses folder jika diperlukan
+# Atur permission
 RUN chown -R www-data:www-data /var/www/html
+
+# Atur DocumentRoot Apache ke /var/www/html
+RUN sed -i 's#^DocumentRoot ".*"#DocumentRoot "/var/www/html"#' /etc/apache2/httpd.conf \
+    && sed -i 's#^<Directory "/var/www/localhost/htdocs">#<Directory "/var/www/html">#' /etc/apache2/httpd.conf
+
+EXPOSE 80
+
+CMD ["httpd", "-D", "FOREGROUND"]
