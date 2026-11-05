@@ -11,8 +11,9 @@ WORKDIR /var/www/html
 # Salin semua file dari repository ke dalam container
 COPY . .
 
-# Gunakan port dinamis yang disediakan oleh Railway
+# Gunakan port 8080 sebagai default aman jika PORT railway tidak terbaca
+ENV PORT=8080
 EXPOSE 8080
 
-# Jalankan server PHP dengan port dinamis Railway ($PORT)
-CMD sh -c "php -S 0.0.0.0:${PORT:-8080}"
+# Jalankan server PHP dengan port dinamis
+CMD php -S 0.0.0.0:$PORT
