@@ -1,18 +1,14 @@
 <?php
-if (session_status() === PHP_SESSION_NONE) {
-    session_start();
-}
+// Mengambil variabel database dari Railway, atau fallback ke localhost jika di XAMPP
+$host     = getenv('MYSQLHOST') ?: getenv('DB_HOST') ?: 'localhost';
+$user     = getenv('MYSQLUSER') ?: getenv('DB_USER') ?: 'root';
+$pass     = getenv('MYSQLPASSWORD') ?: getenv('DB_PASSWORD') ?: '';
+$db       = getenv('MYSQLDATABASE') ?: getenv('DB_NAME') ?: 'marketiva';
+$port     = getenv('MYSQLPORT') ?: getenv('DB_PORT') ?: '3306';
 
-// Otomatis membaca konfigurasi dari Railway atau fallback ke localhost jika dibuka di laptop
-$host = getenv('altaria.proxy.rlwy.net') ?: 'localhost';
-$user = getenv('root') ?: 'root';
-$pass = getenv('rRhPdgvKyaFgaZDbdyFpdXAqrfzMKIAF') ?: '';
-$db   = getenv('railway') ?: 'marketiva';
-$port = getenv('38054') ?: '3306';
+$koneksi = mysqli_connect($host, $user, $pass, $db, (int)$port);
 
-$conn = mysqli_connect($host, $user, $pass, $db, $port);
-
-if (!$conn) {
-    die("Koneksi gagal: " . mysqli_connect_error());
+if (!$koneksi) {
+    die("Koneksi database gagal: " . mysqli_connect_error());
 }
 ?>
